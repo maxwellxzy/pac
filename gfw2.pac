@@ -13661,6 +13661,7 @@ var domainsUsingProxy = {
   "hudson.org": 1,
   "huffingtonpost.com": 1,
   "hugoroy.eu": 1,
+  "huggingface.co": 1,
   "huhaitai.com": 1,
   "huhamhire.com": 1,
   "huhangfei.com": 1,
