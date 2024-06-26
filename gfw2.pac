@@ -13181,6 +13181,7 @@ var domainsUsingProxy = {
   "bing.com": 1,
   "bing.net": 1,
   "openai.com": 1,
+  "chatgpt.com": 1,
   "msn.com": 1,
   "msn.cn": 1,
   "live.com": 1,
