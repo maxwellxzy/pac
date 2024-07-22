@@ -11164,6 +11164,7 @@ var directDomains = {
   "zongheng.com": 1
 };
 //using PROXY
+// password: xZy+mobilephone
 var domainsUsingProxy = {
   "000webhost.com": 1,
   "030buy.com": 1,
