@@ -1,2 +1,1 @@
-# pac for gfw
-default port: http 1099
+ACCESS
