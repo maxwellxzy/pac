@@ -13328,6 +13328,8 @@ var domainsUsingProxy = {
   "googleideas.com": 1,
   "googleinsidesearch.com": 1,
   "googlelabs.com": 1,
+  "google.ai": 1,
+  "google.dev": 1,
   "googlemail.com": 1,
   "googlemashups.com": 1,
   "googlepagecreator.com": 1,
