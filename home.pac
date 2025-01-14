@@ -12324,6 +12324,7 @@ var domainsUsingProxy = {
   "culture.tw": 1,
   "cumlouder.com": 1,
   "curvefish.com": 1,
+  "cursor.com": 1,
   "cusp.hk": 1,
   "cusu.hk": 1,
   "cutscenes.net": 1,
