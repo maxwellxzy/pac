@@ -13177,6 +13177,7 @@ var domainsUsingProxy = {
   "github.io": 1,
   "githubassets.com": 1,
   "githubusercontent.com": 1,
+  "objects.githubusercontent.com": 1,
   "gizlen.net": 1,
   "gjczz.com": 1,
   "glass8.eu": 1,
