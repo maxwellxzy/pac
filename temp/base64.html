@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 转换工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            flex: 1;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .file-input {
+            margin-bottom: 15px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+        }
+        .result-container {
+            position: relative;
+            margin-top: 10px;
+        }
+        .copy-btn {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background-color: #2196F3;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .copy-btn:hover {
+            background-color: #1976D2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Base64 转换工具</h1>
+        
+        <div class="input-group">
+            <label for="input">输入文本:</label>
+            <textarea id="input" placeholder="在此输入要转换的文本"></textarea>
+        </div>
+
+        <div class="button-group">
+            <button onclick="encodeText()">编码为 Base64</button>
+            <button onclick="decodeText()">从 Base64 解码</button>
+        </div>
+
+        <div class="file-input">
+            <label for="fileInput">选择文件转换为 Base64:</label>
+            <input type="file" id="fileInput" onchange="handleFileSelect(event)">
+        </div>
+
+        <div class="result" id="result">
+            转换结果将显示在这里
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(text, button) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '已复制';
+                button.style.backgroundColor = '#4CAF50';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.backgroundColor = '#2196F3';
+                }, 2000);
+            });
+        }
+
+        function encodeText() {
+            const input = document.getElementById('input').value;
+            try {
+                const encoded = btoa(encodeURIComponent(input));
+                document.getElementById('result').innerHTML = 
+                    `<strong>Base64 编码结果:</strong><br>
+                    <div class="result-container">
+                        <textarea readonly style="width:100%;height:100px">${encoded}</textarea>
+                        <button class="copy-btn" onclick="copyToClipboard('${encoded}', this)">复制结果</button>
+                    </div>`;
+            } catch (e) {
+                document.getElementById('result').textContent = '编码失败：' + e.message;
+            }
+        }
+
+        function decodeText() {
+            const input = document.getElementById('input').value;
+            try {
+                const decoded = decodeURIComponent(atob(input));
+                document.getElementById('result').innerHTML = 
+                    `<strong>Base64 解码结果:</strong><br>
+                    <div class="result-container">
+                        <textarea readonly style="width:100%;height:100px">${decoded}</textarea>
+                        <button class="copy-btn" onclick="copyToClipboard('${decoded}', this)">复制结果</button>
+                    </div>`;
+            } catch (e) {
+                document.getElementById('result').textContent = '解码失败：请确保输入的是有效的 Base64 字符串';
+            }
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64String = e.target.result;
+                document.getElementById('result').innerHTML = 
+                    `<strong>文件 "${file.name}" 的 Base64 编码:</strong><br>
+                    <div class="result-container">
+                        <textarea readonly style="width:100%;height:100px">${base64String}</textarea>
+                        <button class="copy-btn" onclick="copyToClipboard('${base64String}', this)">复制结果</button>
+                    </div>`;
+            };
+            reader.readAsDataURL(file);
+        }
+    </script>
+</body>
+</html>
