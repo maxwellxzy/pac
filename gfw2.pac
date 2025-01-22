@@ -16149,6 +16149,7 @@ var domainsUsingProxy = {
   "tpi.org.tw": 1,
   "tracfone.com": 1,
   "tradingview.com": 1,
+  "trae.ai": 1,
   "trans.wenweipo.com": 1,
   "translate.goog": 1,
   "translate.google": 1,
