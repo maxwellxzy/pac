@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>相对湿度计算器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        .formula-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border: 1px solid #e9ecef;
+        }
+        .formula-section h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        .formula-section p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        .formula-section .math {
+            font-family: "Times New Roman", serif;
+            font-style: italic;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 4px;
+            margin: 10px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>相对湿度计算器</h1>
+        <div class="input-group">
+            <label for="temperature">当前温度 (°C):</label>
+            <input type="number" id="temperature" step="0.1" placeholder="输入当前温度">
+        </div>
+        <div class="input-group">
+            <label for="dewpoint">露点温度 (°C):</label>
+            <input type="number" id="dewpoint" step="0.1" placeholder="输入露点温度">
+        </div>
+        <button onclick="calculateHumidity()">计算相对湿度</button>
+        <div class="result" id="result">相对湿度将显示在这里</div>
+        
+        <div class="formula-section">
+            <h2>计算公式说明</h2>
+            <p>相对湿度的计算使用Magnus公式，这是一个广泛应用于气象学的经验公式。计算过程如下：</p>
+            
+            <div class="math">
+                RH = exp(β - α) × 100%
+            </div>
+            
+            <p>其中：</p>
+            <p>α = (17.27 × T) / (237.7 + T) + ln(0.01)</p>
+            <p>β = (17.27 × Td) / (237.7 + Td) + ln(0.01)</p>
+            
+            <p>参数说明：</p>
+            <ul>
+                <li>T: 当前温度 (°C)</li>
+                <li>Td: 露点温度 (°C)</li>
+                <li>17.27 和 237.7 是Magnus公式的经验常数</li>
+                <li>ln(0.01) 是自然对数项，用于校准</li>
+            </ul>
+            
+            <p>计算步骤：</p>
+            <ol>
+                <li>分别计算α和β值</li>
+                <li>计算exp(β - α)</li>
+                <li>将结果乘以100得到百分比形式的相对湿度</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function calculateHumidity() {
+            const temperature = parseFloat(document.getElementById('temperature').value);
+            const dewpoint = parseFloat(document.getElementById('dewpoint').value);
+
+            if (isNaN(temperature) || isNaN(dewpoint)) {
+                document.getElementById('result').textContent = '请输入有效的温度值';
+                return;
+            }
+
+            if (dewpoint > temperature) {
+                document.getElementById('result').textContent = '露点温度不能高于当前温度';
+                return;
+            }
+
+            // 使用Magnus公式计算相对湿度
+            const a = 17.27;
+            const b = 237.7;
+
+            const alpha = ((a * temperature) / (b + temperature)) + Math.log(0.01);
+            const beta = ((a * dewpoint) / (b + dewpoint)) + Math.log(0.01);
+
+            const relativeHumidity = Math.exp(beta - alpha) * 100;
+
+            // 构建完整的计算过程展示
+            const formula = `
+                计算过程：
+                α = (17.27 × ${temperature.toFixed(1)}) / (237.7 + ${temperature.toFixed(1)}) + ln(0.01) = ${alpha.toFixed(4)}
+                β = (17.27 × ${dewpoint.toFixed(1)}) / (237.7 + ${dewpoint.toFixed(1)}) + ln(0.01) = ${beta.toFixed(4)}
+                RH = exp(${beta.toFixed(4)} - ${alpha.toFixed(4)}) × 100% = ${relativeHumidity.toFixed(1)}%
+            `;
+
+            document.getElementById('result').innerHTML = 
+                `相对湿度: ${relativeHumidity.toFixed(1)}%<br><pre style="text-align: left; font-size: 0.9em; margin-top: 10px; white-space: pre-wrap;">${formula}</pre>`;
+        }
+    </script>
+</body>
+</html>
