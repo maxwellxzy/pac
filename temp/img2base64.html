@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>图片 Base64 转换器</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+}
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+}
+.input-area {
+    margin-bottom: 20px;
+}
+#output-area {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    word-wrap: break-word; /* 防止长字符串溢出 */
+}
+#copy-button {
+    padding: 8px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 5px; /*  给复制按钮增加一些下边距，使其与输出框隔开 */
+    transition: background-color 0.3s, color 0.3s; /* 添加过渡效果 */
+}
+#copy-button:hover {
+    background-color: #45a049;
+}
+#copy-button:disabled {
+    background-color: #cccccc; /* 灰色背景 */
+    color: #666666;        /* 深灰色文字 */
+    cursor: not-allowed;    /* 禁用光标 */
+}
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>图片 Base64 转换器</h1>
+
+        <div class="input-area">
+            <input type="file" id="imageUpload" accept="image/*">
+        </div>
+
+        <div>
+            <label for="output-area"><b>Base64 字符串:</b></label>
+            <button id="copy-button" onclick="copyBase64()" disabled style="display:block; margin-bottom: 5px;">复制 Base64</button>
+            <div id="output-area">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        const imageUpload = document.getElementById('imageUpload');
+        const outputArea = document.getElementById('output-area');
+        const copyButton = document.getElementById('copy-button');
+        let base64String = ''; // 用于存储 Base64 字符串的变量
+        let originalButtonText = copyButton.textContent; // 保存按钮原始文本
+
+        imageUpload.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    base64String = e.target.result.split(',')[1]; // 获取 Base64 数据部分，去除前缀
+                    outputArea.textContent = base64String;
+                    copyButton.disabled = false; // 启用复制按钮
+                }
+
+                reader.readAsDataURL(file); // 读取文件为 Data URL
+            } else {
+                outputArea.textContent = ''; // 清空输出区域
+                copyButton.disabled = true; // 禁用复制按钮
+            }
+        });
+
+        function copyBase64() {
+            if (!base64String) return; // 如果没有 Base64 字符串，直接返回
+
+            copyButton.disabled = true; // 禁用按钮，防止重复点击
+            copyButton.textContent = '已复制! (5)'; // 显示 "已复制! (5)"
+
+            let countdown = 5;
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                copyButton.textContent = `已复制! (${countdown})`; // 更新倒计时数字
+
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval); // 清除定时器
+                    copyButton.textContent = originalButtonText; // 恢复原始文本
+                    copyButton.disabled = false; // 重新启用按钮
+                }
+            }, 1000); // 每秒更新一次倒计时
+
+            navigator.clipboard.writeText(base64String).then(() => {
+                // 复制成功，提示信息已经在按钮上显示，无需额外操作
+                console.log('Base64 字符串已复制到剪贴板！');
+            }).catch(err => {
+                console.error('复制失败：', err);
+                copyButton.textContent = '复制失败'; // 复制失败时，按钮显示 "复制失败" (可以根据需要修改)
+                clearInterval(countdownInterval); // 清除定时器，避免倒计时继续
+                setTimeout(() => { // 稍后恢复按钮原始状态
+                    copyButton.textContent = originalButtonText;
+                    copyButton.disabled = false;
+                }, 3000); // 3秒后恢复
+            });
+        }
+    </script>
+</body>
+</html>
