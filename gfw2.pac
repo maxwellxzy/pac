@@ -11161,7 +11161,8 @@ var directDomains = {
   "zhihu.com": 1,
   "zhimg.com": 1,
   "zhubajie.com": 1,
-  "zongheng.com": 1
+  "zongheng.com": 1,
+  "anquanyumingweileburangsoudao.com": 1
 };
 //using PROXY
 // password: xZy+mobilephone
@@ -17126,7 +17127,8 @@ var domainsUsingProxy = {
   "zzcartoon.com": 1,
   "zzcloud.me": 1,
   "zlibrary-global.se": 1,
-  "zzux.com": 1
+  "zzux.com": 1,
+  "anquanyumingweileburangsoudao.co": 1
 };
 
 var localTlds = {

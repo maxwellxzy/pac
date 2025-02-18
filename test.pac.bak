@@ -1,5 +1,4 @@
 var directDomains = {
-  "google.co": 1,
   "example.com": 1,
   "example.com": 1,
   "example.com": 1,
@@ -8,12 +7,12 @@ var directDomains = {
 };
 
 var domainsUsingProxy = {
+  "proxy-domain.org": 1,
+  "proxy-domain.org": 1,
+  "proxy-domain.org": 1,
+  "proxy-domain.org": 1,
+  "proxy-domain.org": 1,
   "google.com": 1,
-  "proxy-domain.org": 1,
-  "proxy-domain.org": 1,
-  "proxy-domain.org": 1,
-  "proxy-domain.org": 1,
-  "proxy-domain.org": 1,
   "proxy-domain.org": 1,
   "proxy-domain.org": 1
 };
