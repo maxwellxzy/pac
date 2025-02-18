@@ -8,9 +8,11 @@ pac_file="gfw2.pac" # 假设 PAC 文件名为 pac_file.pac 且在当前目录
 sr_cnip_ad_conf_url="https://johnshall.github.io/Shadowrocket-ADBlock-Rules-Forever/sr_cnip_ad.conf" # 已存在的 Shadowrocket 配置文件 URL
 sr_cnip_ad_conf="sr_cnip_ad.conf" # 下载的已存在的 Shadowrocket 配置文件名 (本地保存文件名)
 sr_cnip_ad_custom_conf="sr_cnip_ad_custom.conf" # 输出的自定义 Shadowrocket 配置文件名
-proxy_group_name="select_group" # 默认代理组名称，可根据需要修改
+#proxy_group_name="select_group" # 默认代理组名称，可根据需要修改
 https_proxy_address="http://127.0.0.1:1099" # 代理服务器地址，可根据需要修改
 log_file="update.log" # 日志文件名
+direct_keyword="var directDomains"
+proxy_keyword="var domainsUsingProxy"
 
 # 定义日志输出函数，方便记录日志并同时输出到终端 (可选)
 log() {
@@ -58,34 +60,46 @@ log "sr_cnip_ad.conf 文件下载完成。"
 # 初始化用于存储规则的变量
 rule_content=""
 
-# 提取 directDomains 列表
-direct_domains_str=$(grep -oP 'var directDomains = \[\K[^\;]*' "$pac_file" | sed 's/\];//g')
+# 提取 directDomains 列表 (优化 sed 命令，减少反斜杠)
+direct_domains_str=$(awk -v direct_keyword="$direct_keyword" '
+    $0 ~ direct_keyword {flag=1; next}
+    /}/ {flag=0}
+    flag
+' $pac_file)
+# direct_domains_str=$(grep -oP 'var directDomains = \{\K[^\}]*' "$pac_file")
 if [ -n "$direct_domains_str" ]; then
-  IFS=',' read -r -a direct_domains_array <<< "$direct_domains_str"
-  for domain in "${direct_domains_array[@]}"; do
-    domain=$(echo "$domain" | sed "s/^\s*[\"']//g;s/[\"']\s*$//g")
-    if [ -n "$domain" ]; then
-      rule_content+=",DOMAIN-SUFFIX,$domain,direct\n"
-      rule_content+=",DOMAIN,$domain,direct\n"
+  while IFS= read -r -d ',' domain_line; do # 使用逗号作为分隔符逐行读取对象内的内容
+    # 优化后的 sed 命令：使用单引号包裹 sed 命令，并假设域名用双引号包裹，减少转义
+    domain=$(echo "$domain_line" | awk -F '"' '/:/ {print $2}')
+    # domain=$(echo "$domain_line" | sed -E 's/^\s*"([^"]+)":.*/\1/;s/^\s+//;s/\s+$//')
+    if [[ -n "$domain" && "$domain" != "}" ]]; then # 确保域名非空且不是对象结束符
+      rule_content+="DOMAIN-SUFFIX,$domain,Direct\n"
+      # rule_content+=",DOMAIN,$domain,direct\n"
     fi
-  done
+  done <<< "$(echo "$direct_domains_str" | tr '\n' ',' )" # 将换行符替换为逗号，方便循环处理
 fi
 
-# 提取 domainsUsingProxy 列表
-proxy_domains_str=$(grep -oP 'var domainsUsingProxy = \[\K[^\;]*' "$pac_file" | sed 's/\];//g')
+
+# 提取 domainsUsingProxy 列表 (优化 sed 命令，减少反斜杠)
+proxy_domains_str=$(awk -v proxy_keyword="$proxy_keyword" '
+    $0 ~ proxy_keyword {flag=1; next}
+    /}/ {flag=0}
+    flag
+' $pac_file)
+# proxy_domains_str=$(grep -oP 'var domainsUsingProxy = \{\K[^\}]*' "$pac_file")
 if [ -n "$proxy_domains_str" ]; then
-  IFS=',' read -r -a proxy_domains_array <<< "$proxy_domains_str"
-  for domain in "${proxy_domains_array[@]}"; do
-    domain=$(echo "$domain" | sed "s/^\s*[\"']//g;s/[\"']\s*$//g")
-    if [ -n "$domain" ]; then
-      rule_content+=",DOMAIN-SUFFIX,$domain,$proxy_group_name\n"
-      rule_content+=",DOMAIN,$domain,$proxy_group_name\n"
+  while IFS= read -r -d ',' domain_line; do # 使用逗号作为分隔符逐行读取对象内的内容
+    # 优化后的 sed 命令：使用单引号包裹 sed 命令，并假设域名用双引号包裹，减少转义
+    domain=$(echo "$domain_line" | awk -F '"' '/:/ {print $2}')
+    #domain=$(echo "$domain_line" | sed -E 's/^\s*"([^"]+)":.*/\1/;s/^\s+//;s/\s+$//')
+    if [[ -n "$domain" && "$domain" != "}" ]]; then # 确保域名非空且不是对象结束符
+      rule_content+="DOMAIN-SUFFIX,$domain,Proxy\n"
+      #rule_content+=",DOMAIN,$domain,$proxy_group_name\n"
     fi
-  done
+  done <<< "$(echo "$proxy_domains_str" | tr '\n' ',' )" # 将换行符替换为逗号，方便循环处理
 fi
 
-# 添加 FINAL 规则
-rule_content+=",FINAL,$proxy_group_name\n"
+
 
 # 去除 rule_content 变量开头多余的逗号 (如果存在)
 rule_content=$(echo "$rule_content" | sed 's/^,//g')
@@ -114,6 +128,8 @@ log "Shadowrocket 规则已合并到 '$sr_cnip_ad_conf' 并保存为 '$sr_cnip_a
 log "已将自定义规则插入到 [Rule] 区块下方，并添加了 '#自定义规则' 备注。"
 log "请检查新的配置文件 '$sr_cnip_ad_custom_conf' 是否符合您的预期。"
 log "开始执行 Git push..."
+git add .
+git commit -m "update $sr_cnip_ad_custom_conf"
 git push 2>&1 | tee -a "$log_file" # 将 git push 的输出也记录到日志
 git_push_final_status=$?
 if [ $git_push_final_status -ne 0 ]; then
