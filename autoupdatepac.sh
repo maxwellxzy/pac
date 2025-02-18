@@ -20,7 +20,7 @@ log() {
 }
 
 # 记录日志开始标记
-log "# --- BEGIN LOG --- $(date '+%Y-%m-%d %H:%M:%S') --- #"
+log "# --- BEGIN SHADOWROCKET LOG --- $(date '+%Y-%m-%d %H:%M:%S') --- #"
 
 # 设置 HTTPS 代理
 export https_proxy="$https_proxy_address"
@@ -42,7 +42,7 @@ log "PAC 文件 Git pull 完成。"
 # 检查 PAC 文件是否存在 (Git pull 后，PAC 文件应该存在于指定位置)
 if [ ! -f "$pac_file" ]; then
   log "错误：PAC 文件未找到：$pac_file，请确认 Git 仓库中存在此文件。"
-  log "# --- END LOG --- $(date '+%Y-%m-%d %H:%M:%S') --- #" # 记录日志结束标记，即使出错也要记录
+  log "# --- END SHADOWROCKET LOG --- $(date '+%Y-%m-%d %H:%M:%S') --- #" # 记录日志结束标记，即使出错也要记录
   exit 1
 fi
 
