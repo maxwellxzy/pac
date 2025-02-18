@@ -10776,6 +10776,7 @@ var cnips = [
 ];
 
 var directDomains = {
+  "teestabcde.com": 1,
   "disbaidu.com": 1,
   "dingtalk.com": 1,
   "dingtalkapps.com": 1,
