@@ -11167,6 +11167,7 @@ var directDomains = {
 //using PROXY
 // password: xZy+mobilephone
 var domainsUsingProxy = {
+  "claw.cloud": 1,
   "000webhost.com": 1,
   "030buy.com": 1,
   "0rz.tw": 1,

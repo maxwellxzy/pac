@@ -60,6 +60,12 @@ else
     log "添加域名到代理"
     sed -i "/^var domainsUsingProxy.*/a\  \"$domain\": 1," "$pac_file"
 fi
+log "更新home.pac"
+rm -rf home.pac
+cp $pac_file home.pac
+sed -i '1s/127\.0\.0\.1/192\.168\.1\.101/' home.pac
+
+
 log "# --- END ADD DOMAIN LOG --- $(date '+%Y-%m-%d %H:%M:%S') --- #"
 
 git add .

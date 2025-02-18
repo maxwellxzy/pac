@@ -10906,7 +10906,6 @@ var directDomains = {
   "dianping.com": 1,
   "discuz.com": 1,
   "discuz.net": 1,
-  "dl.google.com": 1,
   "docin.com": 1,
   "donews.com": 1,
   "dospy.com": 1,
@@ -10929,6 +10928,7 @@ var directDomains = {
   "geekpark.net": 1,
   "gfan.com": 1,
   "gtimg.com": 1,
+  "gitea.com": 1,
   "hacdn.net": 1,
   "hadns.net": 1,
   "hao123.com": 1,
@@ -11161,10 +11161,13 @@ var directDomains = {
   "zhihu.com": 1,
   "zhimg.com": 1,
   "zhubajie.com": 1,
-  "zongheng.com": 1
+  "zongheng.com": 1,
+  "anquanyumingweileburangsoudao.com": 1
 };
 //using PROXY
+// password: xZy+mobilephone
 var domainsUsingProxy = {
+  "claw.cloud": 1,
   "000webhost.com": 1,
   "030buy.com": 1,
   "0rz.tw": 1,
@@ -13176,12 +13179,14 @@ var domainsUsingProxy = {
   "github.io": 1,
   "githubassets.com": 1,
   "githubusercontent.com": 1,
+  "objects.githubusercontent.com": 1,
   "gizlen.net": 1,
   "gjczz.com": 1,
   "glass8.eu": 1,
   "bing.com": 1,
   "bing.net": 1,
   "openai.com": 1,
+  "chatgpt.com": 1,
   "msn.com": 1,
   "msn.cn": 1,
   "live.com": 1,
@@ -13327,6 +13332,8 @@ var domainsUsingProxy = {
   "googleideas.com": 1,
   "googleinsidesearch.com": 1,
   "googlelabs.com": 1,
+  "google.ai": 1,
+  "google.dev": 1,
   "googlemail.com": 1,
   "googlemashups.com": 1,
   "googlepagecreator.com": 1,
@@ -16144,6 +16151,7 @@ var domainsUsingProxy = {
   "tpi.org.tw": 1,
   "tracfone.com": 1,
   "tradingview.com": 1,
+  "trae.ai": 1,
   "trans.wenweipo.com": 1,
   "translate.goog": 1,
   "translate.google": 1,
@@ -17120,7 +17128,8 @@ var domainsUsingProxy = {
   "zzcartoon.com": 1,
   "zzcloud.me": 1,
   "zlibrary-global.se": 1,
-  "zzux.com": 1
+  "zzux.com": 1,
+  "anquanyumingweileburangsoudao.co": 1
 };
 
 var localTlds = {
