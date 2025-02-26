@@ -11167,6 +11167,7 @@ var directDomains = {
 //using PROXY
 // password: xZy+mobilephone
 var domainsUsingProxy = {
+  "tavily.com": 1,
   "sentry.io": 1,
   "claw.cloud": 1,
   "000webhost.com": 1,
