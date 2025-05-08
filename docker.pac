@@ -1,4 +1,4 @@
-var proxy = "PROXY 192.168.1.108:1099; DIRECT";
+var proxy = "PROXY host.docker.internal:1099; DIRECT";
 
 var direct = 'DIRECT;';
 
